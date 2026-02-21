@@ -2,13 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 
 const C = {
   cream: "#F0EAE0",    // Kaschmir
-  stone: "#DDD4C8",    // Akzentfarbe
-  clay: "#9B8C9E",     // Lavendel (Haupt-Akzent)
-  clayDeep: "#8A7888", // Quarz (Hover & Sekundär-Akzent)
-  moss: "#3C3038",     // Nacht (Dunkler Hintergrund)
+  stone: "#DDD4C8",    // Akzentfarbe / Stone
+  clay: "#9B8C9E",     // Lavendel (Haupt-Akzent & Hero Hintergrund)
+  clayDeep: "#8A7888", // Quarz (Footer & Sekundär-Akzent)
+  moss: "#C0B4C0",     // Helles Lavendel
   mossMid: "#8A7888",  // Quarz
-  dust: "#C0B4C0",     // Helles Lavendel (Linien, zarte Akzente)
-  midnight: "#2E242B", // Tiefes Nacht (Footer)
+  dust: "#C0B4C0",     // Helles Lavendel (Linien)
+  midnight: "#3C3038", // Nacht (wird nur noch für Text & tiefe Tags verwendet)
   white: "#FDFAF5",    // Wollweiß (Haupt-Hintergrund)
   ink: "#3C3038"       // Nacht (Textfarbe)
 };
@@ -155,8 +155,8 @@ function ImageSlot({ label, desc, aspect = "4/3", fill = false }) {
 
 function Label({ n, text, light = false }) {
   return (
-    <div style={{ fontSize: ".62rem", letterSpacing: ".3em", textTransform: "uppercase", color: light ? C.dust : C.clay, marginBottom: "2.2rem", display: "flex", alignItems: "center", gap: "1rem" }}>
-      {n} — {text}<span style={{ display: "block", width: "3rem", height: "1px", background: light ? C.dust : C.clay, opacity: .5 }} />
+    <div style={{ fontSize: ".62rem", letterSpacing: ".3em", textTransform: "uppercase", color: light ? C.cream : C.clay, marginBottom: "2.2rem", display: "flex", alignItems: "center", gap: "1rem" }}>
+      {n} — {text}<span style={{ display: "block", width: "3rem", height: "1px", background: light ? C.cream : C.clay, opacity: .5 }} />
     </div>
   );
 }
@@ -167,7 +167,7 @@ function Lead({ children, light = false }) {
   return <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(1.1rem,1.7vw,1.6rem)", fontWeight: 300, lineHeight: 1.5, color: light ? C.cream : C.ink, marginBottom: "1.6rem" }}>{children}</p>;
 }
 function Tag({ children }) {
-  return <span style={{ display: "inline-block", alignSelf: "flex-start", width: "max-content", maxWidth: "100%", fontSize: ".6rem", letterSpacing: ".2em", textTransform: "uppercase", background: C.clay, color: C.white, padding: ".28rem .7rem", borderRadius: "2px", marginBottom: "1.4rem" }}>{children}</span>;
+  return <span style={{ display: "inline-block", alignSelf: "flex-start", width: "max-content", maxWidth: "100%", fontSize: ".6rem", letterSpacing: ".2em", textTransform: "uppercase", background: C.ink, color: C.white, padding: ".28rem .7rem", borderRadius: "2px", marginBottom: "1.4rem" }}>{children}</span>;
 }
 function Note({ children }) {
   return <div style={{ background: "rgba(155,140,158,.08)", borderLeft: `3px solid ${C.clay}`, padding: "1.3rem 1.8rem", margin: "1.8rem 0", fontSize: ".82rem", lineHeight: 1.7, color: C.ink }}>{children}</div>;
@@ -175,8 +175,16 @@ function Note({ children }) {
 function Btn({ children, onClick, variant = "solid", light = false }) {
   const [hov, setHov] = useState(false);
   const v = {
-    solid: { background: hov ? C.clayDeep : C.clay, color: C.white, border: "none" },
-    outline: { background: hov ? (light ? "rgba(253,250,245,.08)" : "rgba(155,140,158,.07)") : "transparent", color: light ? C.white : C.ink, border: `1.5px solid ${light ? C.dust : C.clay}` },
+    solid: { 
+      background: light ? (hov ? C.cream : C.white) : (hov ? C.clayDeep : C.clay), 
+      color: light ? C.ink : C.white, 
+      border: "none" 
+    },
+    outline: { 
+      background: hov ? (light ? "rgba(253,250,245,.15)" : "rgba(155,140,158,.07)") : "transparent", 
+      color: light ? C.white : C.ink, 
+      border: `1.5px solid ${light ? C.white : C.clay}` 
+    },
   };
   return (
     <button style={{ ...v[variant], padding: ".82rem 2rem", fontSize: ".67rem", letterSpacing: ".22em", textTransform: "uppercase", fontFamily: "'DM Sans',sans-serif", transition: "all .22s", whiteSpace: "nowrap" }}
@@ -210,18 +218,18 @@ function Badge({ children }) {
 /* ─── BREATHING CIRCLE – Subdued Glow ───── */
 function BreathingCircle({ size = 400 }) {
   const rings = [
-    { pct: "0%",  strokeColor: C.dust,  strokeW: "1.5px", opacity: 0.5,  delay: "0s" },
-    { pct: "14%", strokeColor: C.dust,  strokeW: "1px",   opacity: 0.32, delay: "1.6s" },
-    { pct: "30%", strokeColor: C.clay,  strokeW: "1px",   opacity: 0.4,  delay: "3.2s" },
+    { pct: "0%",  strokeColor: C.white,  strokeW: "1.5px", opacity: 0.6,  delay: "0s" },
+    { pct: "14%", strokeColor: C.white,  strokeW: "1px",   opacity: 0.4,  delay: "1.6s" },
+    { pct: "30%", strokeColor: C.cream,  strokeW: "1px",   opacity: 0.5,  delay: "3.2s" },
   ];
   return (
     <div style={{ position: "relative", width: size, height: size, flexShrink: 0, pointerEvents: "none" }}>
-      {/* Subdued ambient glow */}
+      {/* Subdued ambient glow for Lavendel background */}
       <div style={{
         position: "absolute",
         inset: "20%",
         borderRadius: "50%",
-        background: `radial-gradient(ellipse at 50% 50%, rgba(155,140,158,.15) 0%, rgba(138,120,136,.08) 40%, transparent 65%)`,
+        background: `radial-gradient(ellipse at 50% 50%, rgba(253,250,245,.25) 0%, rgba(240,234,224,.1) 40%, transparent 65%)`,
         animation: `breathe 8s ease-in-out infinite 0.7s`
       }} />
       {rings.map((r, i) => (
@@ -297,21 +305,21 @@ function HomePage({ nav }) {
 
   return (
     <>
-      {/* HERO */}
-      <section style={{ background: C.moss, position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse 70% 60% at 65% 45%, rgba(155,140,158,.25) 0%, transparent 65%)`, pointerEvents: "none" }} />
+      {/* HERO – Lavendel als absoluter Hauptakteur */}
+      <section style={{ background: C.clay, position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse 70% 60% at 65% 45%, rgba(253,250,245,.15) 0%, transparent 65%)`, pointerEvents: "none" }} />
         <div className="wk-hero-grid" style={{ maxWidth: "1380px", margin: "0 auto", position: "relative", zIndex: 2 }}>
           <div style={{ display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: "clamp(4rem,8vw,7rem) clamp(1.4rem,5vw,5rem) clamp(3.5rem,6vw,5.5rem)" }}>
-            <div style={{ fontSize: ".62rem", letterSpacing: ".35em", textTransform: "uppercase", color: C.dust, marginBottom: "2rem", display: "flex", alignItems: "center", gap: ".8rem" }}>
-              <span style={{ display: "inline-block", width: "1.5rem", height: "1px", background: C.dust, opacity: .6 }} />
+            <div style={{ fontSize: ".62rem", letterSpacing: ".35em", textTransform: "uppercase", color: C.cream, marginBottom: "2rem", display: "flex", alignItems: "center", gap: ".8rem" }}>
+              <span style={{ display: "inline-block", width: "1.5rem", height: "1px", background: C.cream, opacity: .6 }} />
               Mattersburg · Burgenland · Österreich
             </div>
             <h1 style={{ fontFamily: "'Cormorant Garamond',serif", fontWeight: 300, lineHeight: 1.0, color: C.white, marginBottom: "2rem", fontSize: "clamp(2.5rem,5.5vw,6.8rem)" }}>
               Dein Kind darf sich<br />
-              <em style={{ color: C.clay, fontStyle: "italic" }}>wohlfühlen</em><br />
-              <span style={{ fontSize: "clamp(2rem,3.8vw,4.6rem)", color: C.cream, fontStyle: "italic" }}>— und du auch.</span>
+              <em style={{ color: C.cream, fontStyle: "italic" }}>wohlfühlen</em><br />
+              <span style={{ fontSize: "clamp(2rem,3.8vw,4.6rem)", color: C.white, fontStyle: "italic" }}>— und du auch.</span>
             </h1>
-            <p style={{ fontSize: ".9rem", color: C.stone, lineHeight: 1.9, maxWidth: "400px", marginBottom: "2.8rem" }}>
+            <p style={{ fontSize: ".9rem", color: C.white, lineHeight: 1.9, maxWidth: "400px", marginBottom: "2.8rem" }}>
               Spezialisierte Craniosacral Therapie für Säuglinge und Kleinkinder. Marion Sailer-Riegler, DGKP — Mattersburg.
             </p>
             <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
@@ -322,9 +330,9 @@ function HomePage({ nav }) {
 
           {/* RIGHT – breathing circles */}
           <div className="wk-hero-right" style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "relative", overflow: "hidden" }}>
-            <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse 80% 60% at 60% 40%, rgba(138,120,136,.15) 0%, transparent 65%)`, pointerEvents: "none" }} />
+            <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse 80% 60% at 60% 40%, rgba(240,234,224,.15) 0%, transparent 65%)`, pointerEvents: "none" }} />
             <BreathingCircle size={400} />
-            <div style={{ position: "absolute", bottom: "2.5rem", right: "2.5rem", fontFamily: "'DM Mono',monospace", fontSize: ".57rem", color: C.dust, letterSpacing: ".1em", textAlign: "right", lineHeight: 2.2 }}>
+            <div style={{ position: "absolute", bottom: "2.5rem", right: "2.5rem", fontFamily: "'DM Mono',monospace", fontSize: ".57rem", color: C.cream, letterSpacing: ".1em", textAlign: "right", lineHeight: 2.2 }}>
               CST · TCM · Tuina · G-Well · Aroma<br />
               J.N. Berger-Str. 19 · 7210 Mattersburg
             </div>
@@ -375,24 +383,24 @@ function HomePage({ nav }) {
       </section>
 
       {/* 03 SYMPTOM NAVIGATOR */}
-      <section className="wk-section" style={{ background: C.moss, position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", top: "-10%", right: "-5%", width: "480px", height: "480px", borderRadius: "50%", border: `1px solid rgba(155,140,158,.12)`, pointerEvents: "none" }} />
+      <section className="wk-section" style={{ background: C.cream, position: "relative", overflow: "hidden", borderTop: `1px solid ${C.stone}` }}>
+        <div style={{ position: "absolute", top: "-10%", right: "-5%", width: "480px", height: "480px", borderRadius: "50%", border: `1px solid rgba(138,120,136,.12)`, pointerEvents: "none" }} />
         <div style={{ maxWidth: "880px", margin: "0 auto", textAlign: "center", position: "relative", zIndex: 1 }}>
           <Reveal>
-            <Label n="03" text="Wann kommen Familien zu mir" light />
-            <H2 light size="clamp(1.9rem,3.2vw,3.6rem)">Dein Kind zeigt, was es braucht.<br /><em style={{ color: C.clay }}>Ich übersetze.</em></H2>
-            <p style={{ color: C.stone, marginBottom: "2.5rem", fontSize: ".9rem", lineHeight: 1.85 }}>Viele Eltern kommen zu mir, wenn sie nicht mehr weiterwissen. Wenn das Baby einfach nicht schläft, schreit, sich nicht satt trinkt. Du bist nicht allein damit.</p>
+            <Label n="03" text="Wann kommen Familien zu mir" />
+            <H2 size="clamp(1.9rem,3.2vw,3.6rem)">Dein Kind zeigt, was es braucht.<br /><em style={{ color: C.clay }}>Ich übersetze.</em></H2>
+            <p style={{ color: C.ink, marginBottom: "2.5rem", fontSize: ".9rem", lineHeight: 1.85 }}>Viele Eltern kommen zu mir, wenn sie nicht mehr weiterwissen. Wenn das Baby einfach nicht schläft, schreit, sich nicht satt trinkt. Du bist nicht allein damit.</p>
             <div style={{ marginBottom: "3rem", lineHeight: 2.8 }}>
               {["Mein Baby schläft nicht", "Dreimonatskoliken", "Stillschwierigkeiten", "Nach Kaiserschnitt", "Nach Saugglocke / Zange", "Schiefhals / Schiefer Kopf", "Schreikindsyndrom", "Schlechtes Trinken", "Nach schwieriger Geburt", "Entwicklungsverzögerung", "Rückenschmerzen (Eltern)", "Chronische Verspannungen"].map(s => <Badge key={s}>{s}</Badge>)}
             </div>
-            <Btn light variant="solid" onClick={() => window.open("tel:+436503631969")}>Jetzt Termin anfragen</Btn>
+            <Btn variant="solid" onClick={() => window.open("tel:+436503631969")}>Jetzt Termin anfragen</Btn>
           </Reveal>
         </div>
       </section>
 
       {/* QUOTE + IMAGE */}
       <section className="wk-split">
-        <div style={{ background: C.cream, display: "flex", alignItems: "center", padding: "clamp(2.5rem,5vw,5rem)" }}>
+        <div style={{ background: C.white, display: "flex", alignItems: "center", padding: "clamp(2.5rem,5vw,5rem)" }}>
           <Reveal>
             <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(1.4rem,2.5vw,2.8rem)", fontWeight: 300, lineHeight: 1.35, color: C.ink, fontStyle: "italic", marginBottom: "1.8rem" }}>
               "In jedem Körper steckt die Kraft zur Selbstheilung. Meine Aufgabe ist es, diesen Weg freizumachen."
@@ -462,18 +470,18 @@ function CranioPage({ nav }) {
   ];
   return (
     <>
-      <section style={{ background: C.moss, paddingTop: "70px", position: "relative", overflow: "hidden" }}>
+      <section style={{ background: C.clay, paddingTop: "70px", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "42%", zIndex: 0 }}>
           <ImageSlot label="Cranio Hero" desc="Sanfte Berührung am Kopf eines Neugeborenen. Warmes Licht von rechts. Hände liegen, drücken nicht. Stimmung: Stille, Geborgenheit." fill />
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right,#3C3038 0%,rgba(60,48,56,.2) 100%)", pointerEvents: "none" }} />
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right,#9B8C9E 0%,rgba(155,140,158,.2) 100%)", pointerEvents: "none" }} />
         </div>
         <div style={{ maxWidth: "620px", position: "relative", zIndex: 2, padding: "clamp(5rem,9vw,9rem) clamp(1.4rem,5vw,5rem) 5rem" }}>
           <Tag>Spezialisiert auf Neugeborene & Säuglinge</Tag>
           <h1 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(2.4rem,5vw,5.8rem)", fontWeight: 300, lineHeight: 1.0, color: C.white, marginBottom: "1.4rem" }}>
-            Craniosakrale<br /><em style={{ color: C.clay, fontStyle: "italic" }}>Energetik</em>
+            Craniosakrale<br /><em style={{ color: C.cream, fontStyle: "italic" }}>Energetik</em>
           </h1>
           <Lead light>Ich höre zu, wo Worte noch fehlen.</Lead>
-          <p style={{ color: C.stone, fontSize: ".9rem", lineHeight: 1.85, marginBottom: "2.5rem", maxWidth: "460px" }}>
+          <p style={{ color: C.white, fontSize: ".9rem", lineHeight: 1.85, marginBottom: "2.5rem", maxWidth: "460px" }}>
             Aus 27 Jahren Erfahrung in Unfall-OP und Kinderstation: eine ganzheitliche, ergänzende Therapieform für Säuglinge, Kleinkinder und deren Familien.
           </p>
           <Btn light variant="solid" onClick={() => window.open("tel:+436503631969")}>Termin anfragen</Btn>
@@ -535,26 +543,26 @@ function CranioPage({ nav }) {
         <div style={{ position: "relative", minHeight: "380px" }}>
           <ImageSlot label="Mutter-Kind Moment" desc="Entspannte Mutter hält ruhiges Baby nach der Behandlung. Echte Erleichterung." fill />
         </div>
-        <div style={{ background: C.moss, display: "flex", alignItems: "center", padding: "clamp(2.5rem,5vw,5rem)" }}>
-          <Reveal><Label n="03" text="Deine Fragen" light /><H2 light>Ehrliche Antworten.</H2></Reveal>
+        <div style={{ background: C.cream, display: "flex", alignItems: "center", padding: "clamp(2.5rem,5vw,5rem)" }}>
+          <Reveal><Label n="03" text="Deine Fragen" /><H2>Ehrliche Antworten.</H2></Reveal>
         </div>
       </div>
       <section className="wk-section-s" style={{ maxWidth: "900px", margin: "0 auto" }}>
         {faqs.map((f, i) => <Faq key={i} {...f} />)}
       </section>
-      <section className="wk-section-s" style={{ background: C.moss }}><div style={{ maxWidth: "680px", margin: "0 auto" }}>
+      <section className="wk-section-s" style={{ background: C.clayDeep }}><div style={{ maxWidth: "680px", margin: "0 auto" }}>
         <Reveal>
           <Label n="04" text="Preise" light />
           <H2 light>Transparente Honorare</H2>
-          <div style={{ border: `1px solid rgba(221,212,200,.2)`, marginTop: "2rem" }}>
+          <div style={{ border: `1px solid rgba(253,250,245,.2)`, marginTop: "2rem" }}>
             {[["Erstbehandlung Säugling (60 min)", "€ 75,–"], ["Folgebehandlung (45 min)", "€ 60,–"], ["Erstbehandlung Kleinkind / Erwachsener", "€ 80,–"], ["CST + Tuina kombiniert", "€ 85,–"]].map(([l, p], i) => (
-              <div key={i} style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem", alignItems: "center", padding: "1.1rem 1.8rem", borderBottom: "1px solid rgba(221,212,200,.15)", background: i % 2 === 0 ? "rgba(255,255,255,.03)" : "transparent" }}>
-                <span style={{ fontSize: ".87rem", color: C.stone }}>{l}</span>
-                <span style={{ fontFamily: "'DM Mono',monospace", fontSize: ".84rem", color: C.clay }}>{p}</span>
+              <div key={i} style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem", alignItems: "center", padding: "1.1rem 1.8rem", borderBottom: "1px solid rgba(253,250,245,.15)", background: i % 2 === 0 ? "rgba(255,255,255,.05)" : "transparent" }}>
+                <span style={{ fontSize: ".87rem", color: C.white }}>{l}</span>
+                <span style={{ fontFamily: "'DM Mono',monospace", fontSize: ".84rem", color: C.cream }}>{p}</span>
               </div>
             ))}
           </div>
-          <p style={{ fontSize: ".73rem", color: C.stone, marginTop: "1rem", lineHeight: 1.7 }}>Barzahlung oder Honorarnote für private Zusatzversicherungen.</p>
+          <p style={{ fontSize: ".73rem", color: C.cream, marginTop: "1rem", lineHeight: 1.7 }}>Barzahlung oder Honorarnote für private Zusatzversicherungen.</p>
         </Reveal>
       </div></section>
     </>
@@ -566,15 +574,15 @@ function TCMPage() {
   useEffect(() => { document.title = "TCM Ernährungsberatung | Gsundheitswerkstatt Mattersburg"; }, []);
   return (
     <>
-      <section style={{ background: C.moss }}>
+      <section style={{ background: C.clay }}>
         <div className="wk-tcm-hero">
           <div>
             <Tag>Akademische Expertin · Donau Universität Krems</Tag>
             <h1 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(2.2rem,4.5vw,5.5rem)", fontWeight: 300, lineHeight: 1.0, color: C.white, marginBottom: "1.4rem" }}>
-              Nahrung als<br /><em style={{ color: C.clay }}>Medizin.</em>
+              Nahrung als<br /><em style={{ color: C.cream }}>Medizin.</em>
             </h1>
             <Lead light>Die Energie der Mitte stärken.</Lead>
-            <p style={{ color: C.stone, fontSize: ".9rem", lineHeight: 1.85, maxWidth: "480px" }}>Nach den Prinzipien der TCM kostet die Geburt viel Qi und Blut. Eine angepasste Ernährung hilft Müttern, wieder in ihre Kraft zu kommen — und dem Kind, eine starke Verdauungsmitte aufzubauen.</p>
+            <p style={{ color: C.white, fontSize: ".9rem", lineHeight: 1.85, maxWidth: "480px" }}>Nach den Prinzipien der TCM kostet die Geburt viel Qi und Blut. Eine angepasste Ernährung hilft Müttern, wieder in ihre Kraft zu kommen — und dem Kind, eine starke Verdauungsmitte aufzubauen.</p>
           </div>
           <ImageSlot label="TCM Kräuter & Gewürze" desc="Wärmende Kräuter, Ingwer, Kardamom, kleine Schälchen auf Holz. Warm beleuchtet. Erdfarben." aspect="4/5" />
         </div>
@@ -611,14 +619,14 @@ function TuinaPage() {
   useEffect(() => { document.title = "Kinder-Tuina & Massagetechniken | Gsundheitswerkstatt Mattersburg"; }, []);
   return (
     <>
-      <section style={{ background: C.moss, padding: "clamp(6rem,10vw,9rem) clamp(1.4rem,5vw,5rem) 5rem" }}>
+      <section style={{ background: C.clay, padding: "clamp(6rem,10vw,9rem) clamp(1.4rem,5vw,5rem) 5rem" }}>
         <div style={{ maxWidth: "680px", margin: "0 auto", paddingTop: "40px" }}>
           <Tag>Ausgebildete Kursleitung · Little Path Neusiedl</Tag>
           <h1 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(2.2rem,4.5vw,5.5rem)", fontWeight: 300, lineHeight: 1.0, color: C.white, marginBottom: "1.4rem" }}>
-            Kinder-Tuina &<br /><em style={{ color: C.clay }}>Massagetechniken</em>
+            Kinder-Tuina &<br /><em style={{ color: C.cream }}>Massagetechniken</em>
           </h1>
           <Lead light>Sanfte chinesische Körpertherapie für Kinder und Erwachsene.</Lead>
-          <p style={{ color: C.stone, fontSize: ".9rem", lineHeight: 1.85, maxWidth: "520px" }}>Tuina ist eine der fünf Säulen der TCM. Akupunkturpunkte und Meridiane werden durch sanftes Streichen, Kneten und Reiben stimuliert — schmerzfrei, wohltuend, wirksam.</p>
+          <p style={{ color: C.white, fontSize: ".9rem", lineHeight: 1.85, maxWidth: "520px" }}>Tuina ist eine der fünf Säulen der TCM. Akupunkturpunkte und Meridiane werden durch sanftes Streichen, Kneten und Reiben stimuliert — schmerzfrei, wohltuend, wirksam.</p>
         </div>
       </section>
       <section className="wk-section"><div className="wk-inner wk-2col">
@@ -658,11 +666,11 @@ function SchmerzPage() {
   useEffect(() => { document.title = "Schmerzbehandlung G-Well Pointer | Gsundheitswerkstatt Mattersburg"; }, []);
   return (
     <>
-      <section style={{ background: C.moss, padding: "clamp(6rem,10vw,9rem) clamp(1.4rem,5vw,5rem) 5rem" }}>
+      <section style={{ background: C.clay, padding: "clamp(6rem,10vw,9rem) clamp(1.4rem,5vw,5rem) 5rem" }}>
         <div style={{ maxWidth: "680px", margin: "0 auto", paddingTop: "40px" }}>
           <Tag>Elektrisch-neurologische Schmerztherapie</Tag>
           <h1 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(2.2rem,4.5vw,5.5rem)", fontWeight: 300, lineHeight: 1.0, color: C.white, marginBottom: "1.4rem" }}>
-            Moderne Impulse.<br /><em style={{ color: C.clay }}>Ohne Nadeln.</em>
+            Moderne Impulse.<br /><em style={{ color: C.cream }}>Ohne Nadeln.</em>
           </h1>
           <Lead light>Präzise Punktstimulation bei akuten und chronischen Beschwerden.</Lead>
         </div>
@@ -699,14 +707,14 @@ function AromaPage() {
   ];
   return (
     <>
-      <section style={{ background: C.moss }}>
+      <section style={{ background: C.clay }}>
         <div className="wk-aroma-hero">
           <div>
             <Tag>Ausnahmslos naturreine Öle · Bio-Qualität</Tag>
             <h1 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(2.5rem,4.5vw,5.5rem)", fontWeight: 300, lineHeight: 1.0, color: C.white, marginBottom: "1.4rem" }}>
-              Was der Körper<br />riecht, <em style={{ color: C.clay }}>fühlt er.</em>
+              Was der Körper<br />riecht, <em style={{ color: C.cream }}>fühlt er.</em>
             </h1>
-            <p style={{ color: C.stone, fontSize: ".9rem", lineHeight: 1.85, maxWidth: "480px" }}>
+            <p style={{ color: C.white, fontSize: ".9rem", lineHeight: 1.85, maxWidth: "480px" }}>
               Ätherische Öle wirken nicht nur über den Geruchssinn – sie interagieren direkt mit dem limbischen System, dem Zentrum für Emotionen und Gedächtnis, und über die Haut mit dem Organismus. In der Arbeit mit Babys und jungen Familien sind sie ein sanftes, hochwirksames Werkzeug.
             </p>
           </div>
@@ -779,18 +787,18 @@ function UeberMichPage() {
   ];
   return (
     <>
-      <section className="wk-about-hero" style={{ background: C.moss }}>
+      <section className="wk-about-hero" style={{ background: C.clay }}>
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: "clamp(3rem,6vw,6rem) clamp(1.4rem,5vw,5rem) clamp(3rem,5vw,5rem)" }}>
           <Tag>DGKP · Craniosacral Energetikerin<span className="wk-hide-mob"> · TCM Akademische Expertin</span></Tag>
           <h1 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(2.4rem,5vw,5.5rem)", fontWeight: 300, lineHeight: 1.0, color: C.white, marginBottom: "1.4rem" }}>
-            Marion<br /><em style={{ color: C.clay }}>Sailer-Riegler</em>
+            Marion<br /><em style={{ color: C.cream }}>Sailer-Riegler</em>
           </h1>
           <Lead light>Verwurzelt im Wissen, geleitet vom Gespür.</Lead>
-          <p style={{ color: C.stone, fontSize: ".9rem", lineHeight: 1.85, maxWidth: "440px" }}>Diplomierte Gesundheits- und Krankenpflegerin. 9 Jahre Unfall-OP, 10 Jahre Leiterin Kinderstation KH Eisenstadt. Heute in eigener Praxis in Mattersburg.</p>
+          <p style={{ color: C.white, fontSize: ".9rem", lineHeight: 1.85, maxWidth: "440px" }}>Diplomierte Gesundheits- und Krankenpflegerin. 9 Jahre Unfall-OP, 10 Jahre Leiterin Kinderstation KH Eisenstadt. Heute in eigener Praxis in Mattersburg.</p>
         </div>
         <div style={{ position: "relative", minHeight: "420px" }}>
           <ImageSlot label="Portrait Marion Sailer-Riegler" desc="Natürliches Portrait. Kein weißer Kittel. Direkter Blickkontakt. Warmes Seitenlicht. Authentisch." fill />
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right,rgba(60,48,56,.8) 0%,transparent 40%)", pointerEvents: "none" }} />
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right,rgba(155,140,158,.85) 0%,transparent 40%)", pointerEvents: "none" }} />
         </div>
       </section>
       <section className="wk-section"><div className="wk-inner wk-2col">
@@ -815,12 +823,12 @@ function UeberMichPage() {
           ))}
         </Reveal>
       </div></section>
-      <section className="wk-section-s" style={{ background: C.moss }}><div style={{ maxWidth: "780px", margin: "0 auto" }}>
+      <section className="wk-section-s" style={{ background: C.clayDeep }}><div style={{ maxWidth: "780px", margin: "0 auto" }}>
         <Reveal>
           <Label n="03" text="Meine Haltung" light />
           <H2 light>Medizinisch fundiert. Menschlich nah.</H2>
-          <p style={{ color: C.stone, fontSize: ".9rem", lineHeight: 1.95, marginBottom: "1.3rem" }}>Ich nehme keine Rolle ein, die ich nicht erfüllen kann. Craniosacrale Therapie unterstützt die Selbstheilungskräfte des Körpers.</p>
-          <p style={{ color: C.stone, fontSize: ".9rem", lineHeight: 1.95 }}>Ich spreche beide Sprachen: die der erschöpften Eltern um 3 Uhr nachts und die des Kinderarztes und medizinischen Befundes. Meine Aufgabe ist es, diese beiden Welten zu verbinden.</p>
+          <p style={{ color: C.white, fontSize: ".9rem", lineHeight: 1.95, marginBottom: "1.3rem" }}>Ich nehme keine Rolle ein, die ich nicht erfüllen kann. Craniosacrale Therapie unterstützt die Selbstheilungskräfte des Körpers.</p>
+          <p style={{ color: C.white, fontSize: ".9rem", lineHeight: 1.95 }}>Ich spreche beide Sprachen: die der erschöpften Eltern um 3 Uhr nachts und die des Kinderarztes und medizinischen Befundes. Meine Aufgabe ist es, diese beiden Welten zu verbinden.</p>
         </Reveal>
       </div></section>
       <div className="wk-split">
@@ -897,35 +905,35 @@ function Navbar({ current, nav }) {
 /* ═══════════════ FOOTER ══════════════════════════ */
 function Footer({ nav }) {
   return (
-    <footer style={{ background: C.midnight, padding: "4.5rem clamp(1.4rem,5vw,5rem) 2.5rem" }}>
+    <footer style={{ background: C.clayDeep, padding: "4.5rem clamp(1.4rem,5vw,5rem) 2.5rem" }}>
       <div className="wk-footer-g" style={{ maxWidth: "1200px", margin: "0 auto" }}>
         <div>
-          <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "1.9rem", color: C.cream, marginBottom: "1rem", letterSpacing: ".1em" }}>GSUNDHEITS<span style={{ color: C.dust }}>WERKSTATT</span></div>
-          <p style={{ fontSize: ".8rem", lineHeight: 1.85, color: "rgba(253,250,245,.7)", maxWidth: "300px" }}>Spezialisierte Craniosacral Therapie für Säuglinge und Kleinkinder. TCM · Tuina · G-Well · Aromatherapie. Mattersburg, Burgenland.</p>
+          <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "1.9rem", color: C.white, marginBottom: "1rem", letterSpacing: ".1em" }}>GSUNDHEITS<span style={{ color: C.cream }}>WERKSTATT</span></div>
+          <p style={{ fontSize: ".8rem", lineHeight: 1.85, color: "rgba(253,250,245,.8)", maxWidth: "300px" }}>Spezialisierte Craniosacral Therapie für Säuglinge und Kleinkinder. TCM · Tuina · G-Well · Aromatherapie. Mattersburg, Burgenland.</p>
         </div>
         <div>
-          <div style={{ fontSize: ".57rem", letterSpacing: ".28em", textTransform: "uppercase", color: C.clay, marginBottom: "1.3rem" }}>Leistungen</div>
+          <div style={{ fontSize: ".57rem", letterSpacing: ".28em", textTransform: "uppercase", color: C.cream, marginBottom: "1.3rem" }}>Leistungen</div>
           {[["cranio", "Craniosakrale Energetik"], ["tcm", "TCM Ernährung"], ["tuina", "Tuina & Massagetechniken"], ["schmerz", "G-Well Pointer"], ["aroma", "Aromatherapie"], ["uebermich", "Über mich"]].map(([id, l]) => (
-            <button key={id} onClick={() => nav(id)} style={{ display: "block", background: "none", border: "none", fontSize: ".78rem", color: "rgba(253,250,245,.65)", padding: ".3rem 0", fontFamily: "'DM Sans',sans-serif", textAlign: "left", transition: "color .2s" }}
-              onMouseEnter={e => e.target.style.color = C.dust} onMouseLeave={e => e.target.style.color = "rgba(253,250,245,.65)"}>{l}</button>
+            <button key={id} onClick={() => nav(id)} style={{ display: "block", background: "none", border: "none", fontSize: ".78rem", color: "rgba(253,250,245,.75)", padding: ".3rem 0", fontFamily: "'DM Sans',sans-serif", textAlign: "left", transition: "color .2s" }}
+              onMouseEnter={e => e.target.style.color = C.white} onMouseLeave={e => e.target.style.color = "rgba(253,250,245,.75)"}>{l}</button>
           ))}
         </div>
         <div>
-          <div style={{ fontSize: ".57rem", letterSpacing: ".28em", textTransform: "uppercase", color: C.clay, marginBottom: "1.3rem" }}>Kontakt</div>
-          <div style={{ fontFamily: "'DM Mono',monospace", fontSize: ".74rem", lineHeight: 2.5, color: C.dust, marginBottom: "1.5rem" }}>
+          <div style={{ fontSize: ".57rem", letterSpacing: ".28em", textTransform: "uppercase", color: C.cream, marginBottom: "1.3rem" }}>Kontakt</div>
+          <div style={{ fontFamily: "'DM Mono',monospace", fontSize: ".74rem", lineHeight: 2.5, color: C.white, marginBottom: "1.5rem" }}>
             <div>+43 650 363 19 69</div>
             <div>J.N. Berger-Str. 19</div>
             <div>7210 Mattersburg</div>
           </div>
           <div style={{ display: "flex", gap: ".6rem", flexWrap: "wrap" }}>
             {[["Anrufen", "tel:+436503631969"], ["WhatsApp", "https://wa.me/436503631969"]].map(([l, h]) => (
-              <button key={l} onClick={() => window.open(h)} style={{ background: "transparent", border: `1px solid rgba(192,180,192,.3)`, color: C.dust, padding: ".55rem 1.1rem", fontSize: ".58rem", letterSpacing: ".2em", textTransform: "uppercase", fontFamily: "'DM Sans',sans-serif", transition: "border-color .2s" }}
-                onMouseEnter={e => e.currentTarget.style.borderColor = C.dust} onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(192,180,192,.3)"}>{l}</button>
+              <button key={l} onClick={() => window.open(h)} style={{ background: "transparent", border: `1px solid rgba(253,250,245,.3)`, color: C.white, padding: ".55rem 1.1rem", fontSize: ".58rem", letterSpacing: ".2em", textTransform: "uppercase", fontFamily: "'DM Sans',sans-serif", transition: "background .2s" }}
+                onMouseEnter={e => e.currentTarget.style.background = "rgba(253,250,245,.1)"} onMouseLeave={e => e.currentTarget.style.background = "transparent"}>{l}</button>
             ))}
           </div>
         </div>
       </div>
-      <div style={{ maxWidth: "1200px", margin: "2.5rem auto 0", paddingTop: "1.8rem", borderTop: "1px solid rgba(255,255,255,.05)", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem", fontSize: ".58rem", color: "#666", letterSpacing: ".1em" }}>
+      <div style={{ maxWidth: "1200px", margin: "2.5rem auto 0", paddingTop: "1.8rem", borderTop: "1px solid rgba(253,250,245,.15)", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem", fontSize: ".58rem", color: "rgba(253,250,245,.6)", letterSpacing: ".1em" }}>
         <span>© 2025 Gsundheitswerkstatt · Marion Sailer-Riegler · 7210 Mattersburg · Burgenland</span>
         <div style={{ display: "flex", gap: "1.5rem" }}>
           <span style={{ cursor: "pointer" }}>Impressum</span>
@@ -940,7 +948,6 @@ function Footer({ nav }) {
 export default function App() {
   const [page, setPage] = useState("home");
   useEffect(() => {
-    // Inject custom CSS logic dynamically once
     const s = document.createElement("style");
     s.id = "wk-css";
     s.textContent = CSS;
